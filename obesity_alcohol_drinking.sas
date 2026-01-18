@@ -1,7 +1,7 @@
 libname b 'C:\Users\HajinJang\Documents\hn_coded';
 libname a 'C:\Users\HajinJang\Documents\hn';
 
-/*ÀüÃ¼ À½ÁÖ·®°ú ºñ¸¸À² º¯¼ö»ı¼º(drinking=3°³·Î ºĞ·ù)*/
+/*ì „ì²´ ìŒì£¼ëŸ‰ê³¼ ë¹„ë§Œìœ¨ ë³€ìˆ˜ìƒì„±(drinking=3ê°œë¡œ ë¶„ë¥˜)*/
 data b.drinking;
 set a.hn98_17_03;
 if year=1998 & BD1_2^=. then do;
@@ -27,7 +27,7 @@ end;
 run;
 
 
-/*ÀüÃ¼ À½ÁÖ·®°ú ºñ¸¸À² º¯¼ö»ı¼º (drink=5°³·Î ºĞ·ù)*/
+/*ì „ì²´ ìŒì£¼ëŸ‰ê³¼ ë¹„ë§Œìœ¨ ë³€ìˆ˜ìƒì„± (drink=5ê°œë¡œ ë¶„ë¥˜)*/
 data b.drinking;
 set a.hn98_17_03;
 if year=1998 & BD1_2^=. then do;
@@ -60,7 +60,7 @@ else if BD1_11=6 then drink=5;
 end;
 run;
 
-/*ÀüÃ¼ À½ÁÖ·®°ú ºñ¸¸À² ¿¬°ü¼ººĞ¼®*/
+/*ì „ì²´ ìŒì£¼ëŸ‰ê³¼ ë¹„ë§Œìœ¨ ì—°ê´€ì„±ë¶„ì„*/
 proc surveyreg data=b.drinking nomcar;
 STRATA kstrata;
 CLUSTER psu;
@@ -68,11 +68,11 @@ weight wt_pool_2;
 class cage sex occp region;
 domain year*sex;
 model obe=drink edu cage incm occp region /SOLUTION CLPARM noint vadjust=none;
-estimate 'À½ÁÖ·®º° ºñ¸¸À²'
+estimate 'ìŒì£¼ëŸ‰ë³„ ë¹„ë§Œìœ¨'
 cage 8262905 8627773 8206397 5147501 3635784 2631178/divisor=36511538;
 run;
 
-/*»ç¹«Á¾»çÀÚ¿¡¼­ À½ÁÖ·®°ú ºñ¸¸À² º¯¼ö»ı¼º(drink_5: 5°³·ÎºĞ·ù)*/
+/*ì‚¬ë¬´ì¢…ì‚¬ìì—ì„œ ìŒì£¼ëŸ‰ê³¼ ë¹„ë§Œìœ¨ ë³€ìˆ˜ìƒì„±(drink_5: 5ê°œë¡œë¶„ë¥˜)*/
 data b.drinking;
 set a.hn98_17_03;
 if year=1998 & BD1_2^=. & occp=2 then do;
@@ -106,7 +106,7 @@ end;
 run;
 
 
-/*»ç¹«Á¾»çÀÚ¿¡¼­ À½ÁÖ·®°ú ºñ¸¸À² º¯¼ö»ı¼º(drink_3: 3°³·ÎºĞ·ù)*/
+/*ì‚¬ë¬´ì¢…ì‚¬ìì—ì„œ ìŒì£¼ëŸ‰ê³¼ ë¹„ë§Œìœ¨ ë³€ìˆ˜ìƒì„±(drink_3: 3ê°œë¡œë¶„ë¥˜)*/
 data b.drinking;
 set a.hn98_17_03;
 if year=1998 & BD1_2^=. & occp=2 then do;
@@ -131,7 +131,7 @@ else if 5<=BD1_11<=6 then drink_3=3;
 end;
 run;
 
-/*³²³à »ç¹«Á¾»çÀÚ¿¡¼­ÀÇ À½ÁÖ·®°ú ºñ¸¸À² ¿¬°ü¼ººĞ¼®*/
+/*ë‚¨ë…€ ì‚¬ë¬´ì¢…ì‚¬ìì—ì„œì˜ ìŒì£¼ëŸ‰ê³¼ ë¹„ë§Œìœ¨ ì—°ê´€ì„±ë¶„ì„*/
 proc surveylogistic data=b.drinking nomcar;
 STRATA kstrata;
 CLUSTER psu;
