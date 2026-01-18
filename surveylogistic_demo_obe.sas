@@ -45,19 +45,19 @@ run;
 DATA hn98_17;
 SET hn98_17;
 
-/*¿¬·É±¸°£ º¯¼ö(cage) »ı¼º*/
+/*ì—°ë ¹êµ¬ê°„ ë³€ìˆ˜(cage) ìƒì„±*/
       IF 19<=age<=29 THEN cage=2; ELSE IF 30<=age<=39 THEN cage=3;
 ELSE IF 40<=age<=49 THEN cage=4; ELSE IF 50<=age<=59 THEN cage=5;
 ELSE IF 60<=age<=69 THEN cage=6; ELSE IF 70<=age THEN cage=7;
 
-/*¼ºÀÎ ºñ¸¸ À¯º´¿©ºÎ º¯¼ö(OBE) »ı¼º*/
+/*ì„±ì¸ ë¹„ë§Œ ìœ ë³‘ì—¬ë¶€ ë³€ìˆ˜(OBE) ìƒì„±*/
 IF age>=19 & ((year in (1998,2001) & HS_mens^=3) or (year=2005 & HE_mens^=3)) THEN do;
    IF HE_ht^=. & HE_wt^=. THEN BMI = HE_wt / ((HE_ht/100)**2);
    IF BMI^=. THEN OBE = (BMI>=25);
 END; 
 IF age>=19 & 2007<=year<=2017 & HE_obe in (1,2,3) THEN OBE = (HE_obe=3);
 
-/*1)¿¬µµº° °¡ÁßÄ¡ º¯¼ö¸í ÅëÀÏ(wt_pool_1), 2)ÅëÇÕ°¡ÁßÄ¡ º¯¼ö(wt_pool_2) »ı¼º*/ 
+/*1)ì—°ë„ë³„ ê°€ì¤‘ì¹˜ ë³€ìˆ˜ëª… í†µì¼(wt_pool_1), 2)í†µí•©ê°€ì¤‘ì¹˜ ë³€ìˆ˜(wt_pool_2) ìƒì„±*/ 
 IF 1998<=year<=2001 THEN do; 
    wt_pool_1 = wt_ex;    wt_pool_2 = wt_ex_t;
 end;
@@ -77,12 +77,12 @@ weight wt_pool_2;
 class cage;
 domain year*sex;
 model obe=cage/noint vadjust=none;
-estimate '¿¬µµº° ¼ºº° ºñ¸¸ À¯º´À²'
+estimate 'ì—°ë„ë³„ ì„±ë³„ ë¹„ë§Œ ìœ ë³‘ìœ¨'
 cage 8262905 8627773 8206397 5147501 3635784 2631178/divisor=36511538;
 run;
 
 
-/*¼ºº°°ú ºñ¸¸ ¿¬°ü¼ººĞ¼®*/
+/*ì„±ë³„ê³¼ ë¹„ë§Œ ì—°ê´€ì„±ë¶„ì„*/
 proc surveylogistic data=hn98_17 nomcar;
 STRATA kstrata;
 CLUSTER psu;
@@ -92,7 +92,7 @@ domain year;
 MODEL obe(EVENT='1')=sex / VADJUST=none DF=INFINITY;
 run;
 
-/*³ªÀÌ¿Í ºñ¸¸ ¿¬°ü¼ººĞ¼®*/
+/*ë‚˜ì´ì™€ ë¹„ë§Œ ì—°ê´€ì„±ë¶„ì„*/
 proc surveylogistic data=hn98_17 nomcar;
 STRATA kstrata;
 CLUSTER psu;
@@ -101,7 +101,7 @@ domain year;
 MODEL obe(EVENT='1')=age / VADJUST=none DF=INFINITY;
 run;
 
-/*¼Òµæ(°³ÀÎ)°ú ºñ¸¸ ¿¬°ü¼ººĞ¼®*/
+/*ì†Œë“(ê°œì¸)ê³¼ ë¹„ë§Œ ì—°ê´€ì„±ë¶„ì„*/
 proc surveylogistic data=hn98_17 nomcar;
 STRATA kstrata;
 CLUSTER psu;
@@ -111,7 +111,7 @@ domain year;
 MODEL obe(EVENT='1')=incm / VADJUST=none DF=INFINITY;
 run;ho_incm
 
-/*¼Òµæ(°¡±¸)°ú ºñ¸¸ ¿¬°ü¼ººĞ¼®*/
+/*ì†Œë“(ê°€êµ¬)ê³¼ ë¹„ë§Œ ì—°ê´€ì„±ë¶„ì„*/
 proc surveylogistic data=hn98_17 nomcar;
 STRATA kstrata;
 CLUSTER psu;
@@ -121,7 +121,7 @@ domain year;
 MODEL obe(EVENT='1')=ho_incm / VADJUST=none DF=INFINITY;
 run;
 
-/*±³À°¼öÁØ°ú ºñ¸¸ ¿¬°ü¼ººĞ¼®*/
+/*êµìœ¡ìˆ˜ì¤€ê³¼ ë¹„ë§Œ ì—°ê´€ì„±ë¶„ì„*/
 data hn98_17;
 set hn98_17;
 IF age>=19 & year in (1998,2001) THEN do; 
@@ -142,7 +142,7 @@ MODEL obe(EVENT='1')=edu / VADJUST=none DF=INFINITY;
 run;
 
 
-/*Á÷¾÷°ú ºñ¸¸ ¿¬°ü¼ººĞ¼®*/
+/*ì§ì—…ê³¼ ë¹„ë§Œ ì—°ê´€ì„±ë¶„ì„*/
 data hn98_17;
 set hn98_17;
 IF age>=15 & year in (1998,2001) & job^=10 THEN do; 
