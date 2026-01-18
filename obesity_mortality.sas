@@ -1,4 +1,4 @@
-libname a "C:\Users\HajinJang\OneDrive\OneDrive - °í·Á´ëÇĞ±³\¿¬±¸½Ç\2021\Áúº»_»ç¸Á¿¬°è\½Ã¹ü\»ç¸Á¿¬°è";
+libname a "C:\Users\HajinJang\OneDrive\OneDrive - ê³ ë ¤ëŒ€í•™êµ\ì—°êµ¬ì‹¤\2021\ì§ˆë³¸_ì‚¬ë§ì—°ê³„\ì‹œë²”\ì‚¬ë§ì—°ê³„";
 
 data data07; set a.data07_all; drop LS_type1 LS_type2 LS_type3 LS_type4; run; /*4594*/
 data data08; set a.data08_all; drop LS_type1 LS_type2 LS_type3 LS_type4; run; /*9744*/
@@ -17,7 +17,7 @@ proc sort data=data12; by newkey; run;
 proc sort data=data13; by newkey; run;
 
 
-*4~6±â ÅëÇÕÀÚ·á »ı¼º;
+*4~6ê¸° í†µí•©ìë£Œ ìƒì„±;
 data combine;
 set data07 data08 data09 data10 data11 data12 data13;
 run;
@@ -25,25 +25,25 @@ proc contents data=combine;
 run;
 /*n=58423*/
 
-*µ¥ÀÌÅÍ ÇÕ È®ÀÎÇÏ±â;
+*ë°ì´í„° í•© í™•ì¸í•˜ê¸°;
 proc freq data=combine;
 tables YEAR;
 run;
 
-*»ç¸ÁÀÚ·á;
+*ì‚¬ë§ìë£Œ;
 
-/* µ¥ÀÌÅÍ ³»¿¡ ¾î¶² º¯¼öµéÀÌ ÀÖ´ÂÁö È®ÀÎ */
+/* ë°ì´í„° ë‚´ì— ì–´ë–¤ ë³€ìˆ˜ë“¤ì´ ìˆëŠ”ì§€ í™•ì¸ */
 proc contents data=a.linkage_death; run;  /* mortality data */
 proc freq data=a.linkage_death;
 tables cause11 cause22;
 run;
 
-*»ç¸ÁÀÚ·á¿Í ÇÕÄ¡±â;
+*ì‚¬ë§ìë£Œì™€ í•©ì¹˜ê¸°;
 proc sort data=a.linkage_death; by newkey; run;
 proc sort data=combine; by newkey; run;
 
 
-/*Áßº¹º¯¼ö ¾ø¾Ö±â*/
+/*ì¤‘ë³µë³€ìˆ˜ ì—†ì• ê¸°*/
 data combinedeath;
 merge combine(in=n) a.linkage_death(in=m);
 by newkey;
@@ -51,12 +51,12 @@ if first.newkey then first=1; else first=0; /* to label duplicates, if any */
 if n=1 then nhanes=1; else nhanes=0;  /* to label data points present in NHANES dataset */
 if m=1 then mort=1; else mort=0; /* to label data points present in mortality dataset */
 run;
-/*linkage_death ¶§¹®¿¡ 73353*/
+/*linkage_death ë•Œë¬¸ì— 73353*/
 proc freq data=combinedeath;
 tables first;
 run;
-/* cohort=1 if »ç¸ÁÀÚ·á ¿¬°èÂü¿©ÀÚ */
-/* death=1 if »ç¸ÁÀÚ */
+/* cohort=1 if ì‚¬ë§ìë£Œ ì—°ê³„ì°¸ì—¬ì */
+/* death=1 if ì‚¬ë§ì */
 proc freq data=combinedeath;
 tables year nhanes mort year*cohort year*death;
 run;
@@ -66,7 +66,7 @@ run;
 
 
 /**************************************/
-/*** 1. Restrict to »ç¸ÁÀÚ·á ¿¬°èÂü¿©ÀÚ ***/
+/*** 1. Restrict to ì‚¬ë§ìë£Œ ì—°ê³„ì°¸ì—¬ì ***/
 /**************************************/
 
 data cohort1;
@@ -102,12 +102,12 @@ run;
 
 data cohort3;
 set cohort2;
-if age>=95 then delete; /* 2007-2012 ±îÁö¸¸ 95ÀÌ»ó Á¦¿Ü, 2013-2015³âµµ´Â 80¼¼ÀÌ»óÀº 80À¸·Î ÄÚµùµÇ¾î¼­ Á¦¿ÜºÒ°¡ */
+if age>=95 then delete; /* 2007-2012 ê¹Œì§€ë§Œ 95ì´ìƒ ì œì™¸, 2013-2015ë…„ë„ëŠ” 80ì„¸ì´ìƒì€ 80ìœ¼ë¡œ ì½”ë”©ë˜ì–´ì„œ ì œì™¸ë¶ˆê°€ */
 run;
 
 data cohort3_2;
 set cohort3;
-if year in ("2007", "2008", "2009", "2010", "2011", "2012") and age>80 then age=80; /* ¿¬·É 80¼¼ÀÌ»óÀÎ °æ¿ì 80 À¸·Î ÅëÀÏ½ÃÄÑ ÄÚµù */
+if year in ("2007", "2008", "2009", "2010", "2011", "2012") and age>80 then age=80; /* ì—°ë ¹ 80ì„¸ì´ìƒì¸ ê²½ìš° 80 ìœ¼ë¡œ í†µì¼ì‹œì¼œ ì½”ë”© */
 run;
 /* n=40399 (6 excluded) */
 
@@ -184,28 +184,28 @@ run;
 
 data cohort7_2;
 set cohort7;
-/*½ÉÀåÁúÈ¯, ³úÁ¹Áß*/
+/*ì‹¬ì¥ì§ˆí™˜, ë‡Œì¡¸ì¤‘*/
 if di3_dg=1 or di4_dg=1 or di5_dg=1 or di6_dg=1 
 or di3_pr=1 or di4_pr=1 or di5_pr=1 or di6_pr=1  then delete;
 RUN;
 *n=37265 (exclude : 1644);
-/*½ÅÃ¼È°µ¿ ÃøÁ¤ °¡´ÉÇÑ °ª missing*/
+/*ì‹ ì²´í™œë™ ì¸¡ì • ê°€ëŠ¥í•œ ê°’ missing*/
 data cohort8;
 set cohort7_2;
-if (BE3_11>8 or BE3_11=.) &(BE3_21>8 or BE3_21=.) & (BE3_31>8 or BE3_31=.) then delete; *¸ğµç °ªµéÀÌ ºñÇØ´ç, ¸ğ¸§ ¹«ÀÀ´ä, °áÃøÄ¡;
-if (BE3_11 in (2:7) and (BE3_11=99 or BE3_11=.))& (BE3_21 in (2:7) and (BE3_21=99 or BE3_21=.))&(BE3_31 in (2:7) and (BE3_31=99 or BE3_31=.)) then delete; *ÀÏ¼ö´Â ÀÖ´Âµ¥ ÀüºÎ ´Ù ½Ã°£ °ªÀÌ ÀüºÎ ¾ø´Â °æ¿ì;
+if (BE3_11>8 or BE3_11=.) &(BE3_21>8 or BE3_21=.) & (BE3_31>8 or BE3_31=.) then delete; *ëª¨ë“  ê°’ë“¤ì´ ë¹„í•´ë‹¹, ëª¨ë¦„ ë¬´ì‘ë‹µ, ê²°ì¸¡ì¹˜;
+if (BE3_11 in (2:7) and (BE3_11=99 or BE3_11=.))& (BE3_21 in (2:7) and (BE3_21=99 or BE3_21=.))&(BE3_31 in (2:7) and (BE3_31=99 or BE3_31=.)) then delete; *ì¼ìˆ˜ëŠ” ìˆëŠ”ë° ì „ë¶€ ë‹¤ ì‹œê°„ ê°’ì´ ì „ë¶€ ì—†ëŠ” ê²½ìš°;
 run;
 *n=36119 (exclude : 1146); 
 
-/*½ÅÃ¼È°µ¿ ºÒ°¡´ÉÇÑ »ç¶÷*/
+/*ì‹ ì²´í™œë™ ë¶ˆê°€ëŠ¥í•œ ì‚¬ëŒ*/
 data cohort9;
 set cohort8;
-if lq_1eql=3 then delete; *¿îµ¿´É·ÂÀÌ ºÎÀçÇÑ »ç¶÷ - ³ª´Â Á¾ÀÏ ´©¿ö ÀÖ¾î¾ß ÇÔ;
-*if lq_2eql=3 then delete; *ÀÚ±â °ü¸®: ³ª´Â È¥ÀÚ ¸ñ¿åÀ» ÇÏ°Å³ª ¿ÊÀ» ÀÔÀ» ¼ö ¾øÀ½;
-*if lq_3eql=3 then delete; *ÀÏ»ó»ıÈ°¿¡ ÁöÀå : ³ª´Â ÀÏ»óÈ°µ¿À» ÇÒ ¼ö ¾øÀ½;
+if lq_1eql=3 then delete; *ìš´ë™ëŠ¥ë ¥ì´ ë¶€ì¬í•œ ì‚¬ëŒ - ë‚˜ëŠ” ì¢…ì¼ ëˆ„ì›Œ ìˆì–´ì•¼ í•¨;
+*if lq_2eql=3 then delete; *ìê¸° ê´€ë¦¬: ë‚˜ëŠ” í˜¼ì ëª©ìš•ì„ í•˜ê±°ë‚˜ ì˜·ì„ ì…ì„ ìˆ˜ ì—†ìŒ;
+*if lq_3eql=3 then delete; *ì¼ìƒìƒí™œì— ì§€ì¥ : ë‚˜ëŠ” ì¼ìƒí™œë™ì„ í•  ìˆ˜ ì—†ìŒ;
 run;
 *n=35917(exclude=202);
-/*1³â ³» »ç¸ÁÇÑ »ç¶÷*/
+/*1ë…„ ë‚´ ì‚¬ë§í•œ ì‚¬ëŒ*/
 data cohort10;
 set cohort9;
 if .<person_y=<1 then delete;
@@ -232,21 +232,21 @@ run;
 data cohort11;
 set cohort10;
 
-*±Ù·Â¿îµ¿ ½ÇÃµÀ²;
+*ê·¼ë ¥ìš´ë™ ì‹¤ì²œìœ¨;
 if be5_1 in (1:6) then do;
 if be5_1 in (1,2) then pa_muscle=0;
 if be5_1 in (3:6) then pa_muscle=1;
 end;
 else pa_muscle=.;
 
-*´ç´¢º´ À¯º´ ¿©ºÎ;
+*ë‹¹ë‡¨ë³‘ ìœ ë³‘ ì—¬ë¶€;
 if he_glu^=. & he_fst>=8 & de1_dg in (0,1,8) & de1_31 in (0,1,8) & de1_32 in (0,1,8) then do;
 if he_glu=>126 or de1_31=1 or de1_32=1 or de1_dg=1 then dm_pr=1;
 else dm_pr=2;
 end;
 else dm_pr=.;
 
-*°íÇ÷¾Ğ À¯º´ ¿©ºÎ;
+*ê³ í˜ˆì•• ìœ ë³‘ ì—¬ë¶€;
 if he_sbp^=. & he_dbp^=. & di1_2 in (1,2,3,4,5,8) and year in (2007:2009) then do;
 if he_sbp_tr=>140 or he_dbp_tr=>90 or di1_2 in (1:4) then hp_pr=1;
 else hp_pr=2;
@@ -258,7 +258,7 @@ else hp_pr=2;
 end;
 else hp_pr=.;
 
-*¿¬·É±¸°£ ³ª´©±â;
+*ì—°ë ¹êµ¬ê°„ ë‚˜ëˆ„ê¸°;
 if age ne . then do;
 if age in (19:49) then agecat=1;
 else if age in (50:59) then agecat=2;
@@ -266,7 +266,7 @@ else if age in (60:69) then agecat=3;
 else if age>=70 then agecat=4;
 end;
 
-*65¼¼ ¹Ì¸¸/ ÀÌ»ó;
+*65ì„¸ ë¯¸ë§Œ/ ì´ìƒ;
 
 if age ne . then do;
 if age in (20:64) then seniorcat=0;
@@ -274,58 +274,58 @@ else if age>=65 then seniorcat=1;
 end;
 else seniorcat=.;
 
-*±³À° ¼öÁØ ³ª´©±â;
+*êµìœ¡ ìˆ˜ì¤€ ë‚˜ëˆ„ê¸°;
 if edu in (1:4) then do;
-if edu in (1:2) then educat=1;*ÁßÁ¹ ÀÌÇÏ;
-else if edu=3 then educat=2;*°íÁ¹;
-else if edu=4 then educat=3; *´ëÁ¹ ÀÌ»ó;
+if edu in (1:2) then educat=1;*ì¤‘ì¡¸ ì´í•˜;
+else if edu=3 then educat=2;*ê³ ì¡¸;
+else if edu=4 then educat=3; *ëŒ€ì¡¸ ì´ìƒ;
 end;
 else educat=.;
 
-*°æÁ¦È°µ¿ »óÅÂ(ec1_1=1 :Ãë¾÷ÀÚ, 2´Â ¹ÌÃë¾÷ÀÚ);
+*ê²½ì œí™œë™ ìƒíƒœ(ec1_1=1 :ì·¨ì—…ì, 2ëŠ” ë¯¸ì·¨ì—…ì);
 if ec1_1>2 then ec1_1=.;
 
-*Á÷¾÷ ºĞ·ù - À°Ã¼³ëµ¿ÀÚ, ºñÀ°Ã¼³ëµ¿ÀÚ;
-if occp in (1:3) then p_work=0;*ºñÀ°Ã¼³ëµ¿ÀÚ;
-else if occp in (4:6) then p_work=1;*À°Ã¼ ³ëµ¿ÀÚ;
+*ì§ì—… ë¶„ë¥˜ - ìœ¡ì²´ë…¸ë™ì, ë¹„ìœ¡ì²´ë…¸ë™ì;
+if occp in (1:3) then p_work=0;*ë¹„ìœ¡ì²´ë…¸ë™ì;
+else if occp in (4:6) then p_work=1;*ìœ¡ì²´ ë…¸ë™ì;
 else p_work=.;
 
-*»õ·Î º¯¼ö »ı¼º;
-if ec1_1=1 and occp in (1:3) then occp_new=1;*ºñÀ°Ã¼ ³ëµ¿ÀÚ;
-else if ec1_1=1 and occp in (4:6) then occp_new=2;*À°Ã¼ ³ëµ¿ÀÚ;
-else if ec1_1=2 then occp_new=3;*¹ÌÃë¾÷ÀÚ;
+*ìƒˆë¡œ ë³€ìˆ˜ ìƒì„±;
+if ec1_1=1 and occp in (1:3) then occp_new=1;*ë¹„ìœ¡ì²´ ë…¸ë™ì;
+else if ec1_1=1 and occp in (4:6) then occp_new=2;*ìœ¡ì²´ ë…¸ë™ì;
+else if ec1_1=2 then occp_new=3;*ë¯¸ì·¨ì—…ì;
 
-*¼Òµæ »çºĞÀ§¼ö (1-ÇÏ, 2-ÁßÇÏ,3-Áß»ó, 4-»ó);
+*ì†Œë“ ì‚¬ë¶„ìœ„ìˆ˜ (1-í•˜, 2-ì¤‘í•˜,3-ì¤‘ìƒ, 4-ìƒ);
 if ho_incm>4 then ho_incm=.;
 
-*°áÈ¥ »óÅÂ;
+*ê²°í˜¼ ìƒíƒœ;
 if year in (2007:2009) and marri_1 in (1:2)  then do;
-if marri_1=1 and marri_2=1 then marricat=1;*±âÈ¥;
-else if marri_1=2 then marricat=2;*¹ÌÈ¥;
-else if  (marri_1=1 & marri_2=3) then marricat=3; *»çº°;
-else if (marri_1=1 & marri_2=4) or (marri_1=1 & marri_2=2) then marricat=4;*º°°Å,ÀÌÈ¥;
+if marri_1=1 and marri_2=1 then marricat=1;*ê¸°í˜¼;
+else if marri_1=2 then marricat=2;*ë¯¸í˜¼;
+else if  (marri_1=1 & marri_2=3) then marricat=3; *ì‚¬ë³„;
+else if (marri_1=1 & marri_2=4) or (marri_1=1 & marri_2=2) then marricat=4;*ë³„ê±°,ì´í˜¼;
 end;
 else if year in (2010:2013) and marri_1 in (1:2)  then do;
-if marri_1=1 and marri_2=1 then marricat=1;*±âÈ¥;
-else if marri_1=2 then marricat=2;*¹ÌÈ¥;
-else if  (marri_1=1 & marri_2=3) then marricat=3; *»çº°;
-else if (marri_1=1 & marri_2=4) or (marri_1=1 & marri_2=2) then marricat=4;*º°°Å,ÀÌÈ¥;
+if marri_1=1 and marri_2=1 then marricat=1;*ê¸°í˜¼;
+else if marri_1=2 then marricat=2;*ë¯¸í˜¼;
+else if  (marri_1=1 & marri_2=3) then marricat=3; *ì‚¬ë³„;
+else if (marri_1=1 & marri_2=4) or (marri_1=1 & marri_2=2) then marricat=4;*ë³„ê±°,ì´í˜¼;
 end;
 else marricat=.;
 
 if marricat in (1:4) then do;
-if marricat=1 then marricat_new=1;*±âÈ¥;
-else if marricat=2 then marricat_new=2;*¹ÌÈ¥;
-else if marricat in (3,4) then marricat_new=3;*»çº°, º°°Å, ÀÌÈ¥;
+if marricat=1 then marricat_new=1;*ê¸°í˜¼;
+else if marricat=2 then marricat_new=2;*ë¯¸í˜¼;
+else if marricat in (3,4) then marricat_new=3;*ì‚¬ë³„, ë³„ê±°, ì´í˜¼;
 end;
 else marricat_new=.;
 
 
-*Èí¿¬ »óÅÂ;
+*í¡ì—° ìƒíƒœ;
 if year in (2007:2009) & BS1_1 in (1:3) & BS3_1 in (1,2,3,8) then do;
-if (BS1_1=1 & BS3_1 in (1:2)) or BS1_1=3 then smkcat=1;*ºñÈí¿¬;
-else if BS1_1=2 & BS3_1=2 then smkcat=2;*°ú°ÅÈí¿¬;
-else if BS1_1=2 & BS3_1=1 then smkcat=3;*ÇöÀçÈí¿¬;
+if (BS1_1=1 & BS3_1 in (1:2)) or BS1_1=3 then smkcat=1;*ë¹„í¡ì—°;
+else if BS1_1=2 & BS3_1=2 then smkcat=2;*ê³¼ê±°í¡ì—°;
+else if BS1_1=2 & BS3_1=1 then smkcat=3;*í˜„ì¬í¡ì—°;
 end;
 else
 if year in (2010:2013) & BS1_1 in (1:3) & BS3_1 in (1,2,3,8) then do;
@@ -340,26 +340,26 @@ else if 18.5=<HE_BMI<23 then bmicat=2;
 else if 23=<HE_BMI<25 then bmicat=3;
 else if 25=<HE_BMI then bmicat=4;
 ELSE bmicat=. ;
-* À½ÁÖ ±¸ºĞ-¿ù°£ Æò±Õ À½ÁÖ È½¼ö;
+* ìŒì£¼ êµ¬ë¶„-ì›”ê°„ í‰ê·  ìŒì£¼ íšŸìˆ˜;
 if bd1 in (1:2)  then do;
-if bd1=1 or (bd1=2 & bd1_11=1) then drinkcat=1;*Æò»ı ºñÀ½ÁÖ ¶Ç´Â °ú°ÅÀ½ÁÖ;
-else if bd1=2 & bd1_11 in (2:4) then drinkcat=2;*ÃÖ±Ù 1 ³â°£ 1ÁÖÀÏ¿¡ 1È¸ ÀÌÇÏ À½ÁÖ;
-else if bd1=2 & bd1_11=5  then drinkcat=3;*ÃÖ±Ù 1 ³â°£ ÁÖ 2-3È¸ À½ÁÖ;
-else if bd1=2 & bd1_11=6  then drinkcat=4;*ÃÖ±Ù 1³â°£ ÁÖ 4È¸ ÀÌ»ó À½ÁÖ;
+if bd1=1 or (bd1=2 & bd1_11=1) then drinkcat=1;*í‰ìƒ ë¹„ìŒì£¼ ë˜ëŠ” ê³¼ê±°ìŒì£¼;
+else if bd1=2 & bd1_11 in (2:4) then drinkcat=2;*ìµœê·¼ 1 ë…„ê°„ 1ì£¼ì¼ì— 1íšŒ ì´í•˜ ìŒì£¼;
+else if bd1=2 & bd1_11=5  then drinkcat=3;*ìµœê·¼ 1 ë…„ê°„ ì£¼ 2-3íšŒ ìŒì£¼;
+else if bd1=2 & bd1_11=6  then drinkcat=4;*ìµœê·¼ 1ë…„ê°„ ì£¼ 4íšŒ ì´ìƒ ìŒì£¼;
 end;
 else drinkcat=.;
-* ÁÖ°üÀû °Ç°­;
+* ì£¼ê´€ì  ê±´ê°•;
 if D_1_1 in (1:5) then do;
-if D_1_1 in (1:2) then dcat=1;*ÁÁÀ½;
-else if D_1_1=3 then dcat=2;*º¸Åë;
-else if D_1_1 in (4:5) then dcat=3;*³ª»İ;
+if D_1_1 in (1:2) then dcat=1;*ì¢‹ìŒ;
+else if D_1_1=3 then dcat=2;*ë³´í†µ;
+else if D_1_1 in (4:5) then dcat=3;*ë‚˜ì¨;
 end;
 else dcat=.;
-*Áö¿ª;
+*ì§€ì—­;
 if region in (1:16) and town_t in (1:2) then do;
-if region in (1:7) then regioncat=1;*¼­¿ï+±¤¿ª½Ã;
-else if region in (8:16) and town_t=1 then regioncat=2;*8µµ+µ¿;
-else if region in (8:16) and town_t=2 then regioncat=3;*8µµ+À¾¸é;
+if region in (1:7) then regioncat=1;*ì„œìš¸+ê´‘ì—­ì‹œ;
+else if region in (8:16) and town_t=1 then regioncat=2;*8ë„+ë™;
+else if region in (8:16) and town_t=2 then regioncat=3;*8ë„+ìë©´;
 end;
 run;
 
@@ -378,36 +378,36 @@ run;
 
 data cohort11_2;
 set cohort11_1;
-*MET ±¸ÇÏ±â;
+*MET êµ¬í•˜ê¸°;
 
-/* °İ·ÄÇÑ ½ÅÃ¼È°µ¿ ºóµµ È®ÀÎÇÏ±â************/
+/* ê²©ë ¬í•œ ì‹ ì²´í™œë™ ë¹ˆë„ í™•ì¸í•˜ê¸°************/
 if be3_11=1 then pa=0;
 
 if be3_12 in (0:24) and be3_13 in (0:59) and be3_11 in (2:8) then do;
-pa_day=BE3_11-1; /* °İ·ÄÇÑ ½ÅÃ¼È°µ¿ ³ªÅ¸³»´Â º¯¼ö PA*/
+pa_day=BE3_11-1; /* ê²©ë ¬í•œ ì‹ ì²´í™œë™ ë‚˜íƒ€ë‚´ëŠ” ë³€ìˆ˜ PA*/
 pa_time=BE3_12+(BE3_13/60); 
-pa_time_wk= pa_time*pa_day;*ÀÏÁÖÀÏµ¿¾È!;
+pa_time_wk= pa_time*pa_day;*ì¼ì£¼ì¼ë™ì•ˆ!;
 end;
 else pa_time_wk=.;
 /*************************************/
-/* ÁßÁõµµ  ½ÅÃ¼È°µ¿ ºóµµ È®ÀÎÇÏ±â************/
+/* ì¤‘ì¦ë„  ì‹ ì²´í™œë™ ë¹ˆë„ í™•ì¸í•˜ê¸°************/
 if be3_21=1 then pa2=0;
 
 if be3_22 in (0:24) and be3_23 in (0:59) and be3_21 in (2:8) then do;
 pa_day2=BE3_21-1;
-/*PA2=ÁßÁõµµ ½ÅÃ¼È°µ¿*/
+/*PA2=ì¤‘ì¦ë„ ì‹ ì²´í™œë™*/
 pa_time2=BE3_22+(BE3_23/60);
 pa_time_wk2= (pa_day2*pa_time2);
 end;
 
 else pa_time_wk2=.;
  
-/*°È±â */
+/*ê±·ê¸° */
 if be3_31=1 then walk=0;
 if be3_32 in (0:24) and be3_33 in (0:59) and be3_31 in (2:8) then do;
 walk_day=BE3_31-1;
 
-/*Wday=°È±â*/
+/*Wday=ê±·ê¸°*/
 walk_time=BE3_32+(BE3_33/60);
 walk_time_wk= walk_day*walk_time;
 end;
@@ -432,8 +432,8 @@ run;
 
 
 
-*³Ê¹« ¸¹ÀÌ¿îµ¿ÇÑ´Ù°í ´äÇÑ »ç¶÷. ¹ÏÀ» ¼ö ¾ø´Â »ç¶÷ÀÇ ÀÀ´äÀº ¾î¶² °ª ºÎÅÍÀÏ±î?;
-/*sum functionÀº missing value±îÁö ´Ù Æ÷ÇÔÇØ¼­ °è»êÇØÁÖ±â¶§¹®¿¡ missingÀ» ±×´ë·Î ³²°ÜÁÖ´Â + ÀÌ¿ëÇØ¼­ °è»ê*/
+*ë„ˆë¬´ ë§ì´ìš´ë™í•œë‹¤ê³  ë‹µí•œ ì‚¬ëŒ. ë¯¿ì„ ìˆ˜ ì—†ëŠ” ì‚¬ëŒì˜ ì‘ë‹µì€ ì–´ë–¤ ê°’ ë¶€í„°ì¼ê¹Œ?;
+/*sum functionì€ missing valueê¹Œì§€ ë‹¤ í¬í•¨í•´ì„œ ê³„ì‚°í•´ì£¼ê¸°ë•Œë¬¸ì— missingì„ ê·¸ëŒ€ë¡œ ë‚¨ê²¨ì£¼ëŠ” + ì´ìš©í•´ì„œ ê³„ì‚°*/
 
 data cohort13;
 set cohort12;
@@ -470,20 +470,20 @@ else if 0< modvigmet<10 then modvigcat=1;
 else if 10<= modvigmet<20 then modvigcat=2;
 else if  modvigmet>=20 then modvigcat=3;
 run;
-/*½ÅÃ¼È°µ¿ °¡ÀÌµå¶óÀÎ ½ÇÃµ ¿©ºÎ*/
+/*ì‹ ì²´í™œë™ ê°€ì´ë“œë¼ì¸ ì‹¤ì²œ ì—¬ë¶€*/
 data cohort15;
 set cohort14;
 if totcat in (0:3) and pa_muscle in (0:1) then do;
-if totcat in (0:1) and pa_muscle=0 then tot_m=0;*±Ù·ÂxÀ¯»ê¼Òx;
-if totcat in (0:1) and pa_muscle=1 then tot_m=1;*±Ù·ÂoÀ¯»ê¼Òx;
-if totcat in (2:3) and pa_muscle=0 then tot_m=2;*±Ù·ÂxÀ¯»ê¼Òo;
-if totcat in (2:3) and pa_muscle=1 then tot_m=3;*±Ù·Âo À¯»ê¼Òo;
+if totcat in (0:1) and pa_muscle=0 then tot_m=0;*ê·¼ë ¥xìœ ì‚°ì†Œx;
+if totcat in (0:1) and pa_muscle=1 then tot_m=1;*ê·¼ë ¥oìœ ì‚°ì†Œx;
+if totcat in (2:3) and pa_muscle=0 then tot_m=2;*ê·¼ë ¥xìœ ì‚°ì†Œo;
+if totcat in (2:3) and pa_muscle=1 then tot_m=3;*ê·¼ë ¥o ìœ ì‚°ì†Œo;
 end;
 if modvigcat in (0:3) and pa_muscle in (0:1) then do;
-if modvigcat in (0:1) and pa_muscle=0 then modvig_m=0;*±Ù·ÂxÀ¯»ê¼Òx;
-if modvigcat in (0:1) and pa_muscle=1 then modvig_m=1;*±Ù·ÂoÀ¯»ê¼Òx;
-if modvigcat in (2:3) and pa_muscle=0 then modvig_m=2;*±Ù·ÂxÀ¯»ê¼Òo;
-if modvigcat in (2:3) and pa_muscle=1 then modvig_m=3;*±Ù·Âo À¯»ê¼Òo;
+if modvigcat in (0:1) and pa_muscle=0 then modvig_m=0;*ê·¼ë ¥xìœ ì‚°ì†Œx;
+if modvigcat in (0:1) and pa_muscle=1 then modvig_m=1;*ê·¼ë ¥oìœ ì‚°ì†Œx;
+if modvigcat in (2:3) and pa_muscle=0 then modvig_m=2;*ê·¼ë ¥xìœ ì‚°ì†Œo;
+if modvigcat in (2:3) and pa_muscle=1 then modvig_m=3;*ê·¼ë ¥o ìœ ì‚°ì†Œo;
 end;
 run;
 
@@ -492,46 +492,46 @@ data cohort16;
 set cohort15;
 if be5_1 in (1:6) then do;
 if be5_1=1 then muscle_freq=0;
-if be5_1=2 then muscle_freq=1; *1È¸;
-if be5_1=3 then muscle_freq=2;*2È¸;
-if be5_1 in (4:6) then muscle_freq=3; *2È¸ ÃÊ°ú;
+if be5_1=2 then muscle_freq=1; *1íšŒ;
+if be5_1=3 then muscle_freq=2;*2íšŒ;
+if be5_1 in (4:6) then muscle_freq=3; *2íšŒ ì´ˆê³¼;
 end;
 else muscle_freq=.; 
 
 if be5_1 in (1:6) then do;
 if be5_1=1 then muscle_freq2=0;
-if be5_1 in (2:3) then muscle_freq2=1; *1-2È¸;
-if be5_1 in (4:6) then muscle_freq2=2; *2È¸ ÃÊ°ú;
+if be5_1 in (2:3) then muscle_freq2=1; *1-2íšŒ;
+if be5_1 in (4:6) then muscle_freq2=2; *2íšŒ ì´ˆê³¼;
 end;
 else muscle_freq2=.; 
 run;
 
-/*Áß°­µµ¿¡¼­¸¸ guideline , °í°­µµ¿¡¼­¸¸ guideline*/
+/*ì¤‘ê°•ë„ì—ì„œë§Œ guideline , ê³ ê°•ë„ì—ì„œë§Œ guideline*/
 data cohort17;
 set cohort16;
 if m_pa ne . then do;
 if m_pa=0 then only_m=0; *0met;
-if 0<m_pa<10 then only_m=1;*guideline ¸ø ¸ÂÃã;
+if 0<m_pa<10 then only_m=1;*guideline ëª» ë§ì¶¤;
 if m_pa in (10:19) then only_m=2; *10~19 met;
-if m_pa>=20 then only_m=3; *20ÀÌ»ó;
+if m_pa>=20 then only_m=3; *20ì´ìƒ;
 end;
 else only_m=.;
 if v_pa ne . then do;
 if v_pa=0 then only_v=0; *0met;
-if 0<v_pa<10 then only_v=1;*guideline ¸ø ¸ÂÃã;
+if 0<v_pa<10 then only_v=1;*guideline ëª» ë§ì¶¤;
 if v_pa in (10:19) then only_v=2; *10~19 met;
-if v_pa>=20 then only_v=3; *20ÀÌ»ó;
+if v_pa>=20 then only_v=3; *20ì´ìƒ;
 end;
 else only_v=.;
 
 *guideline ox;
 if m_pa ne . then do;
-if 0<=m_pa<10 then only_m2=0;*guideline ¸ø ¸ÂÃã;
+if 0<=m_pa<10 then only_m2=0;*guideline ëª» ë§ì¶¤;
 if m_pa>=10  then only_m2=1; *10+met;
 end;
 else only_m2=.;
 if v_pa ne . then do;
-if 0<=v_pa<10 then only_v2=0;*guideline ¸ø ¸ÂÃã;
+if 0<=v_pa<10 then only_v2=0;*guideline ëª» ë§ì¶¤;
 if v_pa>=10  then only_v2=1; *10+met;
 end;
 else only_v2=.;
@@ -541,7 +541,7 @@ proc freq data=b.cohort_final;
 where only_v2=1;
 table totmet; run;
 
-/*table2 ¸¸µé±â*/
+/*table2 ë§Œë“¤ê¸°*/
 
 data cohort_v2;
 set cohort17;
@@ -549,7 +549,7 @@ py1=person_y-1; /* because we excluded all death <1 years, all person-time shoul
 pm1=person_m-12;
 pd1=person_d-30;
 
-py1r = round(py1, .02);   /* ¼Ò¼öÁ¡ 2Â°ÀÚ¸®±îÁö Ç¥½ÃÇÏ°Ú´Ù. ±× ¹Ø¿¡¼­ ¹İ¿Ã¸²! */
+py1r = round(py1, .02);   /* ì†Œìˆ˜ì  2ì§¸ìë¦¬ê¹Œì§€ í‘œì‹œí•˜ê² ë‹¤. ê·¸ ë°‘ì—ì„œ ë°˜ì˜¬ë¦¼! */
 pm1r = round(pm1, .02);   
 
 py_m=(age+1+py1r)*12;
@@ -559,9 +559,9 @@ entry_age1=age+1;
 exit_age1=entry_age1+py1;*/
 entry_age1=(age+1)*12;
 exit_age1=entry_age1+pm1;
-/***************1³â ³» »ç¸ÁÀÚ Á¦¿Ü
+/***************1ë…„ ë‚´ ì‚¬ë§ì ì œì™¸
 
-/*2³âÀ¸·Î ÇÑ ¹ø ÇØº¸±â*/
+/*2ë…„ìœ¼ë¡œ í•œ ë²ˆ í•´ë³´ê¸°*/
 py2=person_y-2;
 pm2=person_m-24;
 
@@ -580,15 +580,15 @@ var py1r;
 run;
 /*metabolic syndrome check*/
 /******* BMI and metabolic health *****/
-/* he_hp_tr °íÇ÷¾Ğ À¯º´¿©ºÎ 1=Á¤»ó, 2=Àü´Ü°è, 3=°íÇ÷¾Ğ */
-/* he_dm ´ç´¢º´, 1=Á¤»ó, 2=°øº¹Ç÷´çÀå¾Ö, 3=´ç´¢º´ */
-/* HE_hCHOL °íÄİ·¹½ºÅ×·ÑÇ÷Áõ 0/1 °øº¹½Ã ÃÑÄİ·¹½ºÅ×·Ñ¡Ã240§·/§£ ¶Ç´Â Äİ·¹½ºÅ×·Ñ¾à º¹¿ë*/
-/* HE_hTG °íÁß¼ºÁö¹æÇ÷Áõ 12½Ã°£ ÀÌ»ó °øº¹½Ã Áß¼ºÁö¹æ 200§·/§£ ÀÌ»ó */
-/* HE_LHDL_st ÀúHDL-Äİ·¹½ºÅ×·ÑÇ÷Áõ 8½Ã°£ÀÌ»ó °øº¹ÀÚ Áß HDLÄİ·¹½ºÅ×·Ñ(ÀüÈ¯½Ä Àû¿ë)ÀÌ 40§·/dL ¹Ì¸¸  */
+/* he_hp_tr ê³ í˜ˆì•• ìœ ë³‘ì—¬ë¶€ 1=ì •ìƒ, 2=ì „ë‹¨ê³„, 3=ê³ í˜ˆì•• */
+/* he_dm ë‹¹ë‡¨ë³‘, 1=ì •ìƒ, 2=ê³µë³µí˜ˆë‹¹ì¥ì• , 3=ë‹¹ë‡¨ë³‘ */
+/* HE_hCHOL ê³ ì½œë ˆìŠ¤í…Œë¡¤í˜ˆì¦ 0/1 ê³µë³µì‹œ ì´ì½œë ˆìŠ¤í…Œë¡¤â‰¥240ã/ã— ë˜ëŠ” ì½œë ˆìŠ¤í…Œë¡¤ì•½ ë³µìš©*/
+/* HE_hTG ê³ ì¤‘ì„±ì§€ë°©í˜ˆì¦ 12ì‹œê°„ ì´ìƒ ê³µë³µì‹œ ì¤‘ì„±ì§€ë°© 200ã/ã— ì´ìƒ */
+/* HE_LHDL_st ì €HDL-ì½œë ˆìŠ¤í…Œë¡¤í˜ˆì¦ 8ì‹œê°„ì´ìƒ ê³µë³µì ì¤‘ HDLì½œë ˆìŠ¤í…Œë¡¤(ì „í™˜ì‹ ì ìš©)ì´ 40ã/dL ë¯¸ë§Œ  */
 
 /* metabolic syndrome (International Diabetes Federation cutpoints?) */
 
-/*»ç¸ÁÀÚ ¼ö È®ÀÎ*/
+/*ì‚¬ë§ì ìˆ˜ í™•ì¸*/
 data cohort_v2_2;
 set cohort_v2;
 
@@ -599,7 +599,7 @@ else if he_wc=. then ms_wc=.;
 
 ms_TG=0;
 if he_TG>=150 then ms_TG=1;
-else if dI2_2<5 then ms_TG=1;  /* °íÁöÇ÷ÁõÁ¦ º¹¿ë */
+else if dI2_2<5 then ms_TG=1;  /* ê³ ì§€í˜ˆì¦ì œ ë³µìš© */
 else if he_TG=. then ms_TG=.;
 
 ms_HDL=0;
@@ -608,19 +608,19 @@ else if sex=2 and he_HDL_st2<50 then ms_HDL=1;
 else if dI2_2<5 then ms_HDL=1;
 else if he_HDL_st2=. then ms_HDL=.;
 
-/* ´ç´¢º´ */
+/* ë‹¹ë‡¨ë³‘ */
 if DE1_dg=1 or DE1_pr=1 or DE1_lt=1 
 then diabetes=1; else diabetes=0;
 
 ms_glu=0;
 if he_glu>=100 then ms_glu=1;
-else if DE1_31=1 then ms_glu=1; /* insulin ÁÖ»ç */
-else if DE1_32=1 then ms_glu=1; /* ´ç´¢º´¾à */
-else if diabetes=1 then ms_glu=1; /* ´ç´¢º´ Áø´Ü */
+else if DE1_31=1 then ms_glu=1; /* insulin ì£¼ì‚¬ */
+else if DE1_32=1 then ms_glu=1; /* ë‹¹ë‡¨ë³‘ì•½ */
+else if diabetes=1 then ms_glu=1; /* ë‹¹ë‡¨ë³‘ ì§„ë‹¨ */
 else if he_glu=. then ms_glu=.;
 
 ms_HTN=0;
-if he_sbp>=130 or he_dbp>=85 or DI1_2<5 then ms_HTN=1; /* dI1_2 Ç÷¾ĞÁ¶ÀıÁ¦ º¹¿ë */
+if he_sbp>=130 or he_dbp>=85 or DI1_2<5 then ms_HTN=1; /* dI1_2 í˜ˆì••ì¡°ì ˆì œ ë³µìš© */
 else if he_sbp=. or he_dbp=. then ms_HTN=.;
 
 if ms_wc ne . and ms_TG ne . and ms_HDL ne . and ms_glu ne . and ms_HTN ne . 
@@ -635,7 +635,7 @@ if ms_score=5 then ms_all=1;
 else if ms_score in(1,2,3,4) then ms_all=0;
 else ms_all=.;
 
-/*¿¬·É Ç¥ÁØÈ­À² ¿¬·Éº¯¼ö*/
+/*ì—°ë ¹ í‘œì¤€í™”ìœ¨ ì—°ë ¹ë³€ìˆ˜*/
 if age in (19:29) then cage=1;
 if age in (30:39) then cage=2;
 if age in (40:49) then cage=3;
@@ -651,7 +651,7 @@ end;
 run;
 
 /*****************************************************/
-/*********************ÃÖÁ¾ exclusion*******************/
+/*********************ìµœì¢… exclusion*******************/
 /*****************************************************/
 
 data cohort_v3;
@@ -660,7 +660,7 @@ if modvig_m= . or modvigcat=. or muscle_freq=. then delete;
 run;
 /*35723 (97 excluded)*/
 
-/*death ºĞÆ÷ È®ÀÎ*/
+/*death ë¶„í¬ í™•ì¸*/
 proc freq data=b.cohort_v3;
 tables death*modvig_m cancerdeath*modvig_m cvddeath*modvig_m;
 run;
@@ -671,14 +671,14 @@ proc means data=b.cohort_v3 sum;
 class modvig_m;
 var py1r;
 run;
-/*°¢ º¯¼ö º° missing data ¼ö È®ÀÎ*/
+/*ê° ë³€ìˆ˜ ë³„ missing data ìˆ˜ í™•ì¸*/
 proc freq data=b.cohort_v3;
 tables sex pa_walk bmicat educat regioncat occp_new ho_incm marricat_new drinkcat smkcat dcat;
 run;
 proc means data=b.cohort_v2_2 n nmiss;
 var modvig_m  modvigcat muscle_freq2 sex pa_walk bmicat educat regioncat occp_new ho_incm marricat drinkcat smkcat dcat;
 run;
-/*°áÃøÄ¡ Ã³¸®-¸ğµÎ 1.5%¹Ì¸¸*/
+/*ê²°ì¸¡ì¹˜ ì²˜ë¦¬-ëª¨ë‘ 1.5%ë¯¸ë§Œ*/
 data cohort_final;
 set cohort_v3;
 if pa_walk=. then pa_walk=0;
@@ -707,7 +707,7 @@ run;
 
 /************************************************/
 /************************************************/
-/************** Model ½ÃÀÛ ************************/
+/************** Model ì‹œì‘ ************************/
 /************************************************/
 /************************************************/
 /*******all cause mortality*****/
@@ -780,7 +780,7 @@ strata year ;
 run;
 
 
-/*******************1015¹ÌÆÃÁØºñ**********************/
+/*******************1015ë¯¸íŒ…ì¤€ë¹„**********************/
 proc phreg data=b.cohort_final;
 *where cancer ne 1 and cvd ne 1 and resp ne 1 and extwt ne 1 and exclude ne 1;
 class modvigcat pa_walk year  bmicat sex educat regioncat occp_new ho_incm marricat_new drinkcat  smkcat dcat pa_muscle/param=ref ref=first;
@@ -795,10 +795,10 @@ be5_1*/
 proc freq data=b.cohort_final; 
 table modvigmet; run;
 
-options nocenter ps=78 ls=80 replace formdlim=¡¯=¡¯
+options nocenter ps=78 ls=80 replace formdlim=â€™=â€™
 mautosource
-sasautos=(¡¯/usr/local/channing/sasautos¡¯,
-¡¯/proj/nhsass/nhsas00/nhstools/sasautos¡¯);
+sasautos=(â€™/usr/local/channing/sasautosâ€™,
+â€™/proj/nhsass/nhsas00/nhstools/sasautosâ€™);
 
 %lgtphcurv9(data=b.cohort_final, time=pm1r, model=cox,
 exposure=modvigmet, refval=0, case=death, hicut=900, lowcut=0, nk=5,
@@ -847,7 +847,7 @@ strata year ;
 run;
 
 
-/**********muscle º¸Á¤ ´Ù¸£°Ô**********/
+/**********muscle ë³´ì • ë‹¤ë¥´ê²Œ**********/
 proc phreg data=b.cohort_final;
 *where cancer ne 1 and cvd ne 1 and resp ne 1 and extwt ne 1 and exclude ne 1;
 class modvigcat  pa_walk year muscle_freq bmicat sex educat regioncat occp_new ho_incm marricat_new drinkcat  smkcat dcat  /param=ref ref=first;
@@ -1272,7 +1272,7 @@ model death=muscle_freq2;
 test muscle_freq2;
 run;
 
-/*table6 - interactonÀÌ¶û age ³ª´²¼­*/
+/*table6 - interactonì´ë‘ age ë‚˜ëˆ ì„œ*/
 *modvig_m, seniorcat;
 *model3: reported health;
 proc phreg data=cohort_v2_2;
@@ -1301,7 +1301,7 @@ proc means data=cohort_v2_2 sum;
 where seniorcat=1 and  modvig_m=3;
 var py1r;
 run;
-*p-trend ÀÌ·¸°Ô º¸´Â °ÍÀÌ ¸Â´Â°¡...;
+*p-trend ì´ë ‡ê²Œ ë³´ëŠ” ê²ƒì´ ë§ëŠ”ê°€...;
 
 proc logistic data=cohort_v2_2;
 model cvddeath =muscle_freq2;
@@ -1309,7 +1309,7 @@ test muscle_freq2;
 run;
 
 /*Sensitivity1-exit_age2*/
-/*2³âÀ¸·Î ÇÑ ¹ø ÇØº¸±â- ±×¸®°í 2³â ³»·Î »ç¸ÁÇÑ »ç¶÷ ´Ù Áö¿ò*/
+/*2ë…„ìœ¼ë¡œ í•œ ë²ˆ í•´ë³´ê¸°- ê·¸ë¦¬ê³  2ë…„ ë‚´ë¡œ ì‚¬ë§í•œ ì‚¬ëŒ ë‹¤ ì§€ì›€*/
 /*py2=person_y-2;
 py2r=round(py2,.02);
 entry_age2=age+2;
@@ -1362,7 +1362,7 @@ run;
 
 
 
- /*- modvigmet :¿©±â¼­ºÎÅÍ!!! ´Ù½Ã!*/
+ /*- modvigmet :ì—¬ê¸°ì„œë¶€í„°!!! ë‹¤ì‹œ!*/
 *modvigcat;
 *model1: basic demographic factors;
 proc phreg data=b.cohort_final2;
@@ -1409,7 +1409,7 @@ proc means data=b.cohort_final2  sum;
 where modvigcat=3;
 var py2r;
 run;
-*p trend ±¸ÇØº¸±â;
+*p trend êµ¬í•´ë³´ê¸°;
 proc logistic data=cohort_v3;
 model cvddeath =modvigcat;
 test modvigcat;
@@ -1465,12 +1465,12 @@ model cvddeath=muscle_freq2;
 test muscle_freq2;
 run;
 
-/*sensitivity1-2: 2³â ÀÌÀü¿¡ »ç¸ÁÇÑ »ç¶÷ ´Ù Áö¿î °Å*/
+/*sensitivity1-2: 2ë…„ ì´ì „ì— ì‚¬ë§í•œ ì‚¬ëŒ ë‹¤ ì§€ìš´ ê±°*/
 data cohort_s2;
 set cohort_v3;
 if .<person_y=<2 then delete;
 run;
-/*2³âÀ¸·Î ÇÑ ¹ø ÇØº¸±â
+/*2ë…„ìœ¼ë¡œ í•œ ë²ˆ í•´ë³´ê¸°
 py2=person_y-2;
 py2r=round(py2,.02);
 entry_age2=age+2;
@@ -1568,7 +1568,7 @@ proc means data=cohort_s2 sum;
 where modvigcat=3;
 var py2r;
 run;
-*p trend ±¸ÇØº¸±â;
+*p trend êµ¬í•´ë³´ê¸°;
 proc logistic data=cohort_s2;
 model death =modvigcat;
 test modvigcat;
@@ -1624,7 +1624,7 @@ model death=muscle_freq2;
 test muscle_freq2;
 run;
 
-/*Stratification : ¾îµğ¿¡¼­ HRÀÌ Â÷ÀÌ°¡ ³ª´Â °ÍÀÏ±î? 
+/*Stratification : ì–´ë””ì—ì„œ HRì´ ì°¨ì´ê°€ ë‚˜ëŠ” ê²ƒì¼ê¹Œ? 
 1) sex 
 2) age : 65+/ 65-
 3) bmicat
@@ -1637,7 +1637,7 @@ run;
 10) smkcat 
 11) dcat
 12) pa_walk*/
-/*interaction term È®ÀÎÇÏ±â*/
+/*interaction term í™•ì¸í•˜ê¸°*/
 proc phreg data=b.cohort_final;
 *where cancer ne 1 and cvd ne 1 and resp ne 1 and extwt ne 1 and exclude ne 1;
 class modvig_m  pa_walk year  bmicat sex educat regioncat occp_new ho_incm marricat drinkcat  smkcat dcat  /param=ref ref=first;
