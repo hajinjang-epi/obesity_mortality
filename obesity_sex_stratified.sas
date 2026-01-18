@@ -46,19 +46,19 @@ run;
 DATA a.hn98_18;
 SET a.hn98_18;
 
-/*¿¬·É±¸°£ º¯¼ö(cage) »ı¼º*/
+/*ì—°ë ¹êµ¬ê°„ ë³€ìˆ˜(cage) ìƒì„±*/
       IF 19<=age<=29 THEN cage=2; ELSE IF 30<=age<=39 THEN cage=3;
 ELSE IF 40<=age<=49 THEN cage=4; ELSE IF 50<=age<=59 THEN cage=5;
 ELSE IF 60<=age<=69 THEN cage=6; ELSE IF 70<=age THEN cage=7;
 
-/*¼ºÀÎ ºñ¸¸ À¯º´¿©ºÎ º¯¼ö(OBE) »ı¼º*/
+/*ì„±ì¸ ë¹„ë§Œ ìœ ë³‘ì—¬ë¶€ ë³€ìˆ˜(OBE) ìƒì„±*/
 IF age>=19 & ((year in (1998,2001) & HS_mens^=3) or (year=2005 & HE_mens^=3)) THEN do;
    IF HE_ht^=. & HE_wt^=. THEN BMI = HE_wt / ((HE_ht/100)**2);
    IF BMI^=. THEN OBE = (BMI>=25);
 END; 
 IF age>=19 & 2007<=year<=2018 & HE_obe in (1,2,3) THEN OBE = (HE_obe=3);
 
-/*1)¿¬µµº° °¡ÁßÄ¡ º¯¼ö¸í ÅëÀÏ(wt_pool_1), 2)ÅëÇÕ°¡ÁßÄ¡ º¯¼ö(wt_pool_2) »ı¼º*/ 
+/*1)ì—°ë„ë³„ ê°€ì¤‘ì¹˜ ë³€ìˆ˜ëª… í†µì¼(wt_pool_1), 2)í†µí•©ê°€ì¤‘ì¹˜ ë³€ìˆ˜(wt_pool_2) ìƒì„±*/ 
 IF 1998<=year<=2001 THEN do; 
    wt_pool_1 = wt_ex;    wt_pool_2 = wt_ex_t;
 end;
@@ -71,7 +71,7 @@ end;
 
 RUN;
 
-/*±³À°¼öÁØ ÀçÄÚÆÃ*/
+/*êµìœ¡ìˆ˜ì¤€ ì¬ì½”íŒ…*/
 data a.hn98_18;
 set a.hn98_18;
 IF age>=19 & year in (1998,2001) THEN do; 
@@ -84,7 +84,7 @@ run;
 
 
 /*---------------------------------------------------------------------------------------------------------------------------------------*/
-/*Á÷¾÷ job_t¿¡¼­ occp_re·Î ÄÚµù*/
+/*ì§ì—… job_tì—ì„œ occp_reë¡œ ì½”ë”©*/
 data a.hn98_18;
 set a.hn98_18;
 IF age>=15 & year in (1998,2001,2005) & job^=6 THEN do; 
@@ -96,7 +96,7 @@ IF age>=15 & year in (1998,2001,2005) & job^=6 THEN do;
   end;
 run;
 
-/*Á÷¾÷ job_t¿¡¼­ occp_re·Î ÄÚµù*/
+/*ì§ì—… job_tì—ì„œ occp_reë¡œ ì½”ë”©*/
 data a.hn98_18;
 set a.hn98_18;
 IF age>=15 & year in (2007:2018) THEN do; 
@@ -108,7 +108,7 @@ if occp=7  then occp_re=5;
 end;
 run;
 
-/*Áö¿ª region_re·Î ÀçÄÚµù(°³¼öÁÙÀÌ±â)*/
+/*ì§€ì—­ region_reë¡œ ì¬ì½”ë”©(ê°œìˆ˜ì¤„ì´ê¸°)*/
 data a.hn98_18;
 set a.hn98_18;
 if year in (1998:2015) then do;
@@ -127,7 +127,7 @@ if region=17 then region_re=5;
 end;
 run;
 
-/* bmi ±Ø´ÜÄ¡ Á¦°Å*//*±Ø´ÜÄ¡ Á¦°Å a.hn98_18_bmi ¿¡ ³ÖÀ½---------------------------------------------------*/
+/* bmi ê·¹ë‹¨ì¹˜ ì œê±°*//*ê·¹ë‹¨ì¹˜ ì œê±° a.hn98_18_bmi ì— ë„£ìŒ---------------------------------------------------*/
 data a.hn98_18_bmi;
 set a.hn98_18;
 if year in (1998,2001,2005) then do;
@@ -143,7 +143,7 @@ var BMI he_bmi;
 histogram;
 run;
 
-/*-------------logistic ¼ºº° ¼Òµæ--------------*/
+/*-------------logistic ì„±ë³„ ì†Œë“--------------*/
 proc surveylogistic data=a.hn98_18_bmi nomcar;
 strata kstrata;
 cluster psu;
@@ -151,11 +151,11 @@ weight wt_pool_2;
 class incm(ref="4") cage(ref="7") occp_re(ref="5") region_re(ref="1") edu(ref="4");
 model obe(EVENT='1')=incm cage edu occp_re region_re/VADJUST=NONE;
 domain year*sex;
-estimate '¼Òµæ°ú ºñ¸¸À²'
+estimate 'ì†Œë“ê³¼ ë¹„ë§Œìœ¨'
 cage 8262905 8627773 8206397 5147501 3635784 2631178/divisor=36511538;
 run;
 
-/*--------------¼ºº°º° ºñ¸¸ ÃßÀÌ ºĞ¼®-----------*/
+/*--------------ì„±ë³„ë³„ ë¹„ë§Œ ì¶”ì´ ë¶„ì„-----------*/
 proc surveyfreq data=a.hn98_18_bmi nomcar;
 strata kstrata;
 cluster psu;
@@ -164,7 +164,7 @@ tables year*sex*region_re*obe/row chisq;
 run;
 
 
-/*--------------¼ºº°º° º¹ºÎºñ¸¸(Çã¸®µÑ·¹) ÃßÀÌ ºĞ¼®--------*/
+/*--------------ì„±ë³„ë³„ ë³µë¶€ë¹„ë§Œ(í—ˆë¦¬ë‘˜ë ˆ) ì¶”ì´ ë¶„ì„--------*/
 proc univariate data=a.hn98_18_bmi;
 class year;
 var he_wc;
@@ -200,7 +200,7 @@ weight wt_pool_2;
 tables both_obe obe*both_obe ab_obe*both_obe/row chisq;
 run;
 
-/*-------------logistic º¹ºÎºñ¸¸--------------*/
+/*-------------logistic ë³µë¶€ë¹„ë§Œ--------------*/
 proc surveylogistic data=a.hn98_18_wc nomcar;
 strata kstrata;
 cluster psu;
@@ -208,6 +208,6 @@ weight wt_pool_2;
 class incm(ref="4") cage(ref="7") occp_re(ref="5") region_re(ref="1") edu(ref="4");
 model ab_obe(EVENT='1')=incm cage edu occp_re region_re/VADJUST=NONE;
 domain year*sex;
-estimate '¼Òµæ°ú ºñ¸¸À²'
+estimate 'ì†Œë“ê³¼ ë¹„ë§Œìœ¨'
 cage 8262905 8627773 8206397 5147501 3635784 2631178/divisor=36511538;
 run;
